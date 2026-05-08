@@ -4,6 +4,7 @@ import Calender from "@/components/calender";
 import Hours from "@/components/hours" 
 import Guests from "@/components/guests"
 import { useState,useEffect } from "react";
+import Link from "next/link";
 export default function Date() {
     const [selectedDate,setSelectedDate] = useState<string | null>(null)
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -30,10 +31,6 @@ preferred time to begin your journey at Lumina.</p>
                         <p className="text-center">{fullDate}</p>
                     </div>
                     <Guests/>
-                    <div className="flex justify-between lg:w-1/2 w-full px-2">
-                        <button className="text-neutral flex items-center gap-1"><ChevronLeft className="lg:size-5 size-4"/> Back</button>
-                        <button className="bg-primary lg:px-5 px-3 lg:py-2 py-1 text-tertiary lg:text-base text-sm">Continue to table selection</button>
-                    </div>
                 </form>
             </section>
     );

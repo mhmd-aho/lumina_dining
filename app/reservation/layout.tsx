@@ -1,3 +1,4 @@
+import Buttons from "@/components/reservationButton";
 import Steps from "@/components/steps";
 export default function ReservationLayout({
     children,
@@ -8,6 +9,7 @@ export default function ReservationLayout({
         <main className="min-h-screen w-full flex flex-col items-center gap-5 bg-tertiary text-primary pt-4">
             <Steps/>
             {children}
+            <Buttons/>
         </main>
     );
 }

@@ -31,7 +31,7 @@ export default function Calender({selectedDate,setSelectedDate}: {selectedDate: 
                         <p key={`day-header-${i}`} className="text-center">{day}</p>
                     ))}
                     {Array.from({ length: monthEnd }).map((_, i) => (
-                        <button disabled={i + 1 < today.getDate() && month === today.getMonth()} value={i+1} onClick={(e: React.MouseEvent) => {handleDateSelect(e,i+1)}} key={`day-${i}`} className={`text-center ${i + 1 < today.getDate() && month === today.getMonth() ? 'text-neutral' : 'hover:bg-secondary hover:text-tertiary rounded'} ${selectedDate === `${year}-${String(month+1).padStart(2,'0')}-${String(i+1).padStart(2,'0')}` && 'bg-secondary text-tertiary border-none'}`}>{i + 1}</button>
+                        <button disabled={i + 1 < today.getDate() + 2 && month === today.getMonth()} value={i+1} onClick={(e: React.MouseEvent) => {handleDateSelect(e,i+1)}} key={`day-${i}`} className={`text-center ${i + 1 <= today.getDate() + 2 && month === today.getMonth() ? 'text-neutral' : 'hover:bg-secondary hover:text-tertiary rounded'} ${selectedDate === `${year}-${String(month+1).padStart(2,'0')}-${String(i+1).padStart(2,'0')}` && 'bg-secondary text-tertiary border-none'}`}>{i + 1}</button>
                     ))}
                 </div>
             </div>
