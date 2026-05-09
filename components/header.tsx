@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
-import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
+import MobileMenu from "./mobile-menu";
 export default function Header() {
     const pathname = usePathname()
     return (
         <header className="sticky top-0 z-50 h-14 w-full bg-tertiary flex justify-between items-center px-4">
-            <Menu className='size-4 sm:hidden text-primary' />
+            <MobileMenu/>
             <Link href="/">
                 <span className="text-2xl font-notoserif text-primary tracking-widest">LUMINA</span>
             </Link>

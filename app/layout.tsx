@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter,Noto_Serif } from "next/font/google";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const notoserif = Noto_Serif({ subsets: ["latin"], variable: "--font-notoserif" });
@@ -23,9 +21,7 @@ export default function RootLayout({
       className={`${notoserif.variable} ${inter.variable} h-full antialiased`}
     >
       <body className={`${inter.className} min-h-full flex flex-col`}>
-        <Header/>
         {children}
-        <Footer/>
       </body>
     </html>
   );

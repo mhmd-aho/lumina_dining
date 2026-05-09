@@ -6,10 +6,10 @@ export default function ReservationLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <main className="min-h-screen w-full flex flex-col items-center gap-5 bg-tertiary text-primary pt-4">
+        <section className="min-h-screen w-full flex flex-col items-center gap-5 bg-tertiary text-primary pt-4">
             <Steps/>
             {children}
             <Buttons/>
-        </main>
+        </section>
     );
 }
