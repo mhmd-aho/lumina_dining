@@ -1,7 +1,7 @@
 "use client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
-export default function Calender({selectedDate,setSelectedDate}: {selectedDate: string | null,setSelectedDate: (date: string) => void}) {
+export default function Calender({dateError,selectedDate,setSelectedDate}: {dateError: boolean,selectedDate: string | null,setSelectedDate: (date: string) => void}) {
     const [month,setMonth] = useState(new Date().getMonth())
     const months = ['January','February','March','April','May','June','July','August','September','October','November','December']
     const today = new Date()
@@ -34,6 +34,7 @@ export default function Calender({selectedDate,setSelectedDate}: {selectedDate: 
                         <button disabled={i + 1 < today.getDate() + 2 && month === today.getMonth()} value={i+1} onClick={(e: React.MouseEvent) => {handleDateSelect(e,i+1)}} key={`day-${i}`} className={`text-center ${i + 1 <= today.getDate() + 2 && month === today.getMonth() ? 'text-neutral' : 'hover:bg-secondary hover:text-tertiary rounded'} ${selectedDate === `${year}-${String(month+1).padStart(2,'0')}-${String(i+1).padStart(2,'0')}` && 'bg-secondary text-tertiary border-none'}`}>{i + 1}</button>
                     ))}
                 </div>
+                {dateError && <p className="text-red-500 text-sm">Please select a date</p>}
             </div>
         </div>
     );

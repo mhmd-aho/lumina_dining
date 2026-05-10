@@ -1,13 +1,13 @@
 "use client"
 import { Minus, Plus, Users } from "lucide-react";
-export default function Guests({selectedGuests,setSElectedGuests}: {selectedGuests: number | null,setSElectedGuests: React.Dispatch<React.SetStateAction<number | null>>}) {
+export default function Guests({guestsError,selectedGuests,setSelectedGuests}: {guestsError: boolean,selectedGuests: number | null,setSelectedGuests: React.Dispatch<React.SetStateAction<number | null>>}) {
     const handleGuestIncrease = (e: React.MouseEvent) => {
         e.preventDefault();
-        setSElectedGuests((selectedGuests || 0) + 1)
+        setSelectedGuests((selectedGuests || 0) + 1)
     }
     const handleGuestDecrease = (e: React.MouseEvent) => {
         e.preventDefault();
-        setSElectedGuests((selectedGuests || 0) - 1)
+        setSelectedGuests((selectedGuests || 0) - 1)
     }
     return (
         <div className="lg:w-1/2 w-full h-fit p-4 flex flex-col gap-3 lg:shadow">
@@ -27,6 +27,7 @@ export default function Guests({selectedGuests,setSElectedGuests}: {selectedGues
                     <Plus className="lg:size-7 size-4"/>
                 </button>
             </div>
+            {guestsError && <p className="text-red-500 text-sm">Please select number of guests</p>}
         </div>
     )
 }

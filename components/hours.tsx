@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-export default function Hours({selectedTime,setSelectedTime}: {selectedTime: string | null,setSelectedTime: (time: string) => void}) {
+export default function Hours({timeError,selectedTime,setSelectedTime}: {timeError: boolean,selectedTime: string | null,setSelectedTime: (time: string) => void}) {
     const handleTimeSelect = (e: React.MouseEvent, time: string) => {
         e.preventDefault();
         setSelectedTime(time);
@@ -20,6 +20,7 @@ export default function Hours({selectedTime,setSelectedTime}: {selectedTime: str
                     </React.Fragment>
                 ))}
             </div>
+            {timeError && <p className="text-red-500 text-sm">Please select a time</p>}
         </div>
     )
 }

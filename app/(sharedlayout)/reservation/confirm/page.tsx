@@ -1,10 +1,23 @@
 "use client"
 import Image from "next/image"
 import img from '@/public/Restaurant-IL-Giardino_Hotel-Byblos_Saint-Tropez-©Stephan-Julliard-7-1600x1000.webp'
-import { CarFront, Shirt,CircleAlert } from "lucide-react"
-import { useReservation } from "@/lib/context/reservationContext";
+import { CarFront, Shirt,CircleAlert, ChevronLeft } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation";
 export default function Page() {
-    const {date,guests,table} = useReservation();
+    const date = localStorage.getItem('selected-date')
+    const guests = localStorage.getItem('selected-guests');
+    const table = localStorage.getItem('selected-table');
+    const router = useRouter();
+    const handleSubmit = () => {
+       console.log('date',date);
+       console.log('guests',guests);
+       console.log('table',table);
+       localStorage.removeItem('selected-date');
+       localStorage.removeItem('selected-guests');
+       localStorage.removeItem('selected-table');
+       router.push('/reservation/done')
+    }
     return(
         <section className="flex-1 lg:w-3/4 w-full flex flex-col gap-10">
             <div className="w-full h-fit p-4 flex lg:flex-row flex-col-reverse max-lg:gap-5 lg:justify-between items-center rounded lg:shadow">
@@ -56,6 +69,10 @@ export default function Page() {
                         may be subject to a fee.
                     </p>
                 </div>
+            </div>
+            <div className="lg:w-1/2 w-full flex justify-between items-center max-lg:px-2">
+                <Link href="/reservation/table"><ChevronLeft/>Back</Link>
+                <button onClick={()=>handleSubmit()} className="bg-primary lg:px-5 px-3 lg:py-2 py-1 text-tertiary lg:text-base text-xs" type="submit">Confirm</button>
             </div>
         </section>
     )
