@@ -1,7 +1,10 @@
+"use client"
 import Image from "next/image"
 import img from '@/public/Restaurant-IL-Giardino_Hotel-Byblos_Saint-Tropez-©Stephan-Julliard-7-1600x1000.webp'
-import { CalendarPlus, MapPin,CarFront, Shirt,CircleAlert } from "lucide-react"
+import { CarFront, Shirt,CircleAlert } from "lucide-react"
+import { useReservation } from "@/lib/context/reservationContext";
 export default function Page() {
+    const {date,guests,table} = useReservation();
     return(
         <section className="flex-1 lg:w-3/4 w-full flex flex-col gap-10">
             <div className="w-full h-fit p-4 flex lg:flex-row flex-col-reverse max-lg:gap-5 lg:justify-between items-center rounded lg:shadow">
@@ -13,17 +16,17 @@ export default function Page() {
                         </div>
                         <div>
                             <h3 className="text-neutral text-sm font-bold">DATE & TIME</h3>
-                            <h2 className="font-notoserif lg:text-2xl text-lg">date, time</h2>
+                            <h2 className="font-notoserif lg:text-2xl text-lg">{date}</h2>
                         </div>
                     </div>
                     <div className="flex gap-10 max-lg:justify-between">
                         <div>
                             <h3 className="text-neutral text-sm font-bold">GUEST</h3>
-                            <h2 className="font-notoserif lg:text-2xl text-lg">4 guests</h2>
+                            <h2 className="font-notoserif lg:text-2xl text-lg">{guests} guests</h2>
                         </div>
                         <div>
                             <h3 className="text-neutral text-sm font-bold">TABLE SELECTION</h3>
-                            <h2 className="font-notoserif lg:text-2xl text-lg">#06</h2>
+                            <h2 className="font-notoserif lg:text-2xl text-lg">#{table}</h2>
                         </div>
                     </div>
                 </div>

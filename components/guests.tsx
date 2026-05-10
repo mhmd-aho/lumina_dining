@@ -1,15 +1,13 @@
 "use client"
 import { Minus, Plus, Users } from "lucide-react";
-import { useState } from "react";
-export default function Guests() {
-    const [guests,setGuests] = useState(0);
+export default function Guests({selectedGuests,setSElectedGuests}: {selectedGuests: number | null,setSElectedGuests: React.Dispatch<React.SetStateAction<number | null>>}) {
     const handleGuestIncrease = (e: React.MouseEvent) => {
         e.preventDefault();
-        setGuests(guests + 1)
+        setSElectedGuests((selectedGuests || 0) + 1)
     }
     const handleGuestDecrease = (e: React.MouseEvent) => {
         e.preventDefault();
-        setGuests(guests - 1)
+        setSElectedGuests((selectedGuests || 0) - 1)
     }
     return (
         <div className="lg:w-1/2 w-full h-fit p-4 flex flex-col gap-3 lg:shadow">
@@ -22,7 +20,7 @@ export default function Guests() {
                     <Minus className="lg:size-7 size-4"/>
                 </button>
                 <div className="lg:size-20 size-10 flex flex-col items-center justify-center">
-                    <p className="font-notoserif lg:text-6xl text-4xl">{String(guests).padStart(2,'0')}</p>    
+                    <p className="font-notoserif lg:text-6xl text-4xl">{String(selectedGuests || 0).padStart(2,'0')}</p>    
                     <p className="text-sm text-neutral">Guests</p>
                 </div>
                 <button onClick={(e) => handleGuestIncrease(e)} className="lg:size-14 size-10 border border-neutral rounded-xl flex items-center justify-center">

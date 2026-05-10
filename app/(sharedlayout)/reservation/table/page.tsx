@@ -1,7 +1,13 @@
-import { ChevronLeft } from "lucide-react";
-import Link from "next/link";
+"use client"
+import { useEffect, useState } from "react";
+import { useReservation } from "@/lib/context/reservationContext";
 
 export default function Page() {
+    const {setTable} = useReservation();
+    const [selectedTable,setSelectedTable] = useState<number | null>(null);
+    useEffect(() =>{
+        if(selectedTable !== null ) setTable(selectedTable);
+    },[selectedTable])
     return(
         <section className="flex-1 w-full flex lg:flex-row flex-col gap-8 px-4">
             <div className="lg:w-72 w-full h-fit p-2 rounded shadow flex flex-col max-lg:items-center  lg:gap-5 gap-2">
@@ -28,42 +34,42 @@ export default function Page() {
             </div>
             <div className="flex-1 h-full shadow max-lg:overflow-x-scroll">
                 <div className="lg:w-full w-[1000px]   flex justify-center flex-wrap gap-40 py-4">
-                    <div className="size-16 rounded  border-3 border-secondary flex items-center justify-center">
-                        <p className="text-secondary">T01</p>
-                    </div>
-                    <div className="size-16 rounded bg-neutral flex items-center justify-center">
-                        <p className="text-tertiary">T02</p>
-                    </div>
-                    <div className="size-16 rounded  border-3 border-secondary flex items-center justify-center">
-                        <p className="text-secondary">T03</p>
-                    </div>
-                    <div className="size-16 rounded border-3 border-secondary flex items-center justify-center">
-                        <p className="text-secondary">T04</p>
-                    </div>
-                    <div className="size-16 rounded  border-3 border-secondary flex items-center justify-center">
-                        <p className="text-secondary">T05</p>
-                    </div>
-                    <div className="size-16 rounded bg-secondary flex items-center justify-center scale-125">
-                        <p className="text-tertiary">T06</p>
-                    </div>
-                    <div className="size-16 rounded border-3 border-secondary flex items-center justify-center">
-                        <p className="text-secondary">T07</p>
-                    </div>
-                    <div className="size-16 rounded  border-3 border-secondary flex items-center justify-center">
-                        <p className="text-secondary">T08</p>
-                    </div>
-                    <div className="size-16 rounded border-3 border-secondary flex items-center justify-center">
-                        <p className="text-secondary">T09</p>
-                    </div>
-                    <div className="size-16 rounded  border-3 border-secondary flex items-center justify-center">
-                        <p className="text-secondary">T10</p>
-                    </div>
-                    <div className="h-16 w-32 rounded border-3 border-secondary flex items-center justify-center">
-                        <p className="text-secondary">Lounge A</p>
-                    </div>
-                    <div className="h-16 w-32 rounded  border-3 border-secondary flex items-center justify-center">
-                        <p className="text-secondary">Lounge B</p>
-                    </div>
+                    <button onClick={() => setSelectedTable(1)} className={`size-16 rounded  border-3 border-secondary flex items-center justify-center ${selectedTable === 1 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
+                        <p>T01</p>
+                    </button>
+                    <button onClick={() => setSelectedTable(2)} className={`size-16 rounded bg-neutral flex items-center justify-center ${selectedTable === 2 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
+                        <p>T02</p>
+                    </button>
+                    <button onClick={() => setSelectedTable(3)} className={`size-16 rounded  border-3 border-secondary flex items-center justify-center ${selectedTable === 3 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
+                        <p>T03</p>
+                    </button>
+                    <button onClick={() => setSelectedTable(4)} className={`size-16 rounded border-3 border-secondary flex items-center justify-center ${selectedTable === 4 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
+                        <p>T04</p>
+                    </button>
+                    <button onClick={() => setSelectedTable(5)} className={`size-16 rounded  border-3 border-secondary flex items-center justify-center ${selectedTable === 5 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
+                        <p>T05</p>
+                    </button>
+                    <button onClick={() => setSelectedTable(6)} className={`size-16 rounded border-3 border-secondary flex items-center justify-center ${selectedTable === 6 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
+                        <p>T06</p>
+                    </button>
+                    <button onClick={() => setSelectedTable(7)} className={`size-16 rounded border-3 border-secondary flex items-center justify-center ${selectedTable === 7 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
+                        <p>T07</p>
+                    </button>
+                    <button onClick={() => setSelectedTable(8)} className={`size-16 rounded  border-3 border-secondary flex items-center justify-center ${selectedTable === 8 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
+                        <p>T08</p>
+                    </button>
+                    <button onClick={() => setSelectedTable(9)} className={`size-16 rounded border-3 border-secondary flex items-center justify-center ${selectedTable === 9 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
+                        <p>T09</p>
+                    </button>
+                    <button onClick={() => setSelectedTable(10)} className={`size-16 rounded  border-3 border-secondary flex items-center justify-center ${selectedTable === 10 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
+                        <p>T10</p>
+                    </button>
+                    <button onClick={() => setSelectedTable(11)} className={`h-16 w-32 rounded border-3 border-secondary flex items-center justify-center ${selectedTable === 11 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
+                        <p>Lounge A</p>
+                    </button>
+                    <button onClick={() => setSelectedTable(12)} className={`h-16 w-32 rounded  border-3 border-secondary flex items-center justify-center ${selectedTable === 12 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
+                        <p>Lounge B</p>
+                    </button>
                 </div>
             </div>
         </section>

@@ -8,7 +8,7 @@ export default function MobileMenu(){
     const [open,setOpen] = useState(false);
     const pathname = usePathname();
     return (
-        <div>
+        <div className="relative sm:hidden">
             <Menu className='size-4 sm:hidden text-primary' onClick={()=> setOpen(!open)} />
             {
                 open && (

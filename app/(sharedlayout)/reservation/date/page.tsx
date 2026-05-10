@@ -4,16 +4,21 @@ import Calender from "@/components/calender";
 import Hours from "@/components/hours" 
 import Guests from "@/components/guests"
 import { useState,useEffect } from "react";
-import Link from "next/link";
+import { useReservation } from "@/lib/context/reservationContext";
 export default function Date() {
+    const {setDate,setGuests} = useReservation();
     const [selectedDate,setSelectedDate] = useState<string | null>(null)
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
-    const [fullDate,setFullDate] = useState<string | null>(null)
+    const [selectedGuests, setSElectedGuests] = useState<number | null>(null);
+    
     useEffect(()=>{
         if(selectedDate && selectedTime){
-            setFullDate(`${selectedDate} ${selectedTime}`)
+            setDate(`${selectedDate} ${selectedTime}`)
         }
-    },[selectedDate,selectedTime])
+        if(selectedGuests){
+            setGuests(selectedGuests);
+        }
+    },[selectedDate,selectedTime,selectedGuests])
     return (
          <section className="flex-1 w-full flex flex-col items-center gap-5">
                 <div className="flex flex-col items-center gap-2 text-center lg:w-1/2 w-full">
@@ -28,9 +33,9 @@ preferred time to begin your journey at Lumina.</p>
                            <Calender selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
                            <Hours selectedTime={selectedTime} setSelectedTime={setSelectedTime}/>
                         </div>
-                        <p className="text-center">{fullDate}</p>
+                        <p className="text-center">{`${selectedDate} ${selectedTime}`}</p>
                     </div>
-                    <Guests/>
+                    <Guests selectedGuests={selectedGuests} setSElectedGuests={setSElectedGuests}/>
                 </form>
             </section>
     );
