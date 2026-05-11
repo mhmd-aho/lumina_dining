@@ -1,5 +1,5 @@
 "use server"
-import { ReservetionType,signinSchema,registerSchema } from "@/lib/schemas";
+import { ReservationFormSchema,signinSchema,registerSchema } from "@/lib/schemas";
 import { serverFetch } from "@/lib/server-fetch";
 import { cookies } from "next/headers";
 import { z } from "zod";
@@ -49,7 +49,7 @@ export async function signupAction(data:z.infer<typeof registerSchema>){
         return {success: false, error: 'Network error or internal server error'}
     }
 }
-export async function postReservation(data:ReservetionType){
+export async function postReservation(data:z.infer<typeof ReservationFormSchema>){
     try{
         const res = await serverFetch('/api/reserve/',{
         method:'POST',
@@ -63,4 +63,28 @@ export async function postReservation(data:ReservetionType){
         return {success:false, data: error}
     }
     
+}
+export async function deleteReservation(id:number){
+    try{
+        const res = await serverFetch(`/api/reserve/${id}/`,{
+        method:'DELETE'
+    })
+    return {success:true, data: await res.json()}
+    }catch(error){
+        return {success:false, data: error}
+    }
+}
+export async function updateReservation(id:number,data:z.infer<typeof ReservationFormSchema>){
+    try{
+        const res = await serverFetch(`/api/reserve/${id}/`,{
+        method:'PUT',
+        headers: {
+                "Content-Type": "application/json"
+            },
+        body: JSON.stringify(data)
+    })
+    return {success:true, data: await res.json()}
+    }catch(error){
+        return {success:false, data: error}
+    }
 }

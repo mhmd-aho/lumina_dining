@@ -18,8 +18,19 @@ export type MenuItemType ={
 export type ReservetionType = {
     table: number,
     booking_time:string,
-    guests:number
+    guests:number,
+    id:number,
+    user:{
+        id:number,
+        username:string,
+        email:string
+    }
 }
+export const ReservationFormSchema = z.object({
+    booking_time: z.string(),
+    guests: z.number().min(1),
+    table: z.number().min(1),
+})
 export const signinSchema = z.object({
     username: z.string().min(3, 'username is too short'),
     password: z.string().min(8, "password is too short"),
