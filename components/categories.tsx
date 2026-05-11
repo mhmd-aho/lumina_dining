@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { CategoryType } from "@/lib/sechams";
+import { CategoryType } from "@/lib/schemas";
 import { useCategory } from "@/lib/context/categoryContext";
 export default function Categories (){
     const {setSelectedCategory,selectedCategory} = useCategory();
@@ -8,7 +8,7 @@ export default function Categories (){
     useEffect(()=>{
         const fetchCategories = async () =>{
             try{
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/category/`)
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category/`)
                 if(!res.ok){
                     throw new Error('Failed to fetch categories')
                 }

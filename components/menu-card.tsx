@@ -1,4 +1,4 @@
-import { MenuItemType } from "@/lib/sechams";
+import { MenuItemType } from "@/lib/schemas";
 export default function MenuCard({item}: {item: MenuItemType}) {
 
     return (
@@ -7,7 +7,7 @@ export default function MenuCard({item}: {item: MenuItemType}) {
             <div className="p-4 bg-white flex flex-col gap-4">
                 <div className="flex justify-between">
                     <h1 className="font-notoserif text-primary text-2xl">{item.name}</h1>
-                    <p className="text-secondary text-lg">{item.price}</p>
+                    <p className="text-secondary text-lg">$ {item.price}</p>
                 </div>
                 <p className="text-neutral text-sm">{item.description}</p>
             </div>

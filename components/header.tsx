@@ -1,21 +1,19 @@
-"use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import MobileMenu from "./mobile-menu";
-export default function Header() {
-    const pathname = usePathname()
+import User from "./user";
+import { getUser } from "@/lib/user";
+import NavBar from "./desktop-nav";
+import { UserType } from "@/lib/schemas";
+export default async function Header() {
+    const user: UserType | string = await getUser()
     return (
         <header className="sticky top-0 z-50 h-14 w-full bg-tertiary flex justify-between items-center px-4">
             <MobileMenu/>
             <Link href="/">
                 <span className="text-2xl font-notoserif text-primary tracking-widest">LUMINA</span>
             </Link>
-            <nav className="flex space-x-8 font-notoserif max-sm:hidden">
-                <Link className={`${pathname === '/' ? 'text-secondary border-b-2 border-secondary' : 'text-primary'}`} href="/">Menu</Link>
-                <Link className={`${pathname.includes('/reservation') ? 'text-secondary border-b-2 border-secondary' : 'text-primary'}`} href="/reservation/date">Reservation</Link>
-                <Link className={`${pathname === '/our-story' ? 'text-secondary border-b-2 border-secondary' : 'text-primary'}`} href="/our-story">Our Story</Link>
-            </nav>
-            <Link className="text-base text-neutral" href="/">Log In</Link>
+            <NavBar/>
+            <User user={user}/>
         </header>
     );
 }   

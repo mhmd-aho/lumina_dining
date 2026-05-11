@@ -4,19 +4,31 @@ import img from '@/public/Restaurant-IL-Giardino_Hotel-Byblos_Saint-Tropez-©Ste
 import { CarFront, Shirt,CircleAlert, ChevronLeft } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation";
+import { useTransition } from "react"
+import { postReservation } from "@/app/action"
 export default function Page() {
     const date = localStorage.getItem('selected-date')
     const guests = localStorage.getItem('selected-guests');
     const table = localStorage.getItem('selected-table');
+    const [pending,startTransition] = useTransition()
     const router = useRouter();
     const handleSubmit = () => {
-       console.log('date',date);
-       console.log('guests',guests);
-       console.log('table',table);
-       localStorage.removeItem('selected-date');
-       localStorage.removeItem('selected-guests');
-       localStorage.removeItem('selected-table');
-       router.push('/reservation/done')
+    if(!date || !guests || !table){
+        console.log('all that data are required')
+    }
+      startTransition(async ()=>{
+        const res = await postReservation({
+            booking_time: date.replace(" ", "T"), // Format to ISO-8601 for Django DateTimeField
+            guests:Number(guests),
+            table: Number(table)
+        })
+        if(res.success){
+            console.log(res.data)
+            router.push('/')
+        }else{
+            console.log(res.data)
+        }
+    })
     }
     return(
         <section className="flex-1 lg:w-3/4 w-full flex flex-col gap-10">
@@ -72,7 +84,7 @@ export default function Page() {
             </div>
             <div className="lg:w-1/2 w-full flex justify-between items-center max-lg:px-2">
                 <Link href="/reservation/table"><ChevronLeft/>Back</Link>
-                <button onClick={()=>handleSubmit()} className="bg-primary lg:px-5 px-3 lg:py-2 py-1 text-tertiary lg:text-base text-xs" type="submit">Confirm</button>
+                <button disabled={pending}  onClick={()=>handleSubmit()} className="bg-primary lg:px-5 px-3 lg:py-2 py-1 text-tertiary lg:text-base text-xs" type="submit">Confirm</button>
             </div>
         </section>
     )
