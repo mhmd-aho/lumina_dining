@@ -36,7 +36,7 @@ export default function UpdateForm({data}: {data: ReservetionType}){
                 <form className="flex flex-col gap-5 ">
                     <div className="flex flex-col shadow p-2">
                         <h2 className="lg:text-2xl text-lg font-notoserif text-primary flex items-center gap-3"><Clock className="text-secondary lg:size-5 size-4"/>Date & Time</h2>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between ">
                             <input className="text-primary lg:text-base text-sm px-2 py-1 border border-neutral" value={date} onChange={(e) => setDate(e.target.value)} type="date" name="date" id="date" />
                             <input className="text-primary lg:text-base text-sm px-2 py-1 border border-neutral" value={time} onChange={(e) => setTime(e.target.value)} type="time" name="time" id="time" />
                         </div>

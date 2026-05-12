@@ -88,3 +88,31 @@ export async function updateReservation(id:number,data:z.infer<typeof Reservatio
         return {success:false, data: error}
     }
 }
+export async function favoriteAction(id:number){
+    try{
+        const res = await serverFetch(`/api/favorite/`,{
+        method:'POST',
+        headers: {
+                "Content-Type": "application/json"
+            },
+        body: JSON.stringify({menu_item: id})
+    })
+    return {success:true, data: await res.json()}
+    }catch(error){
+        return {success:false, data: error}
+    }
+}
+export async function unfavoriteAction(id:number){
+    try{
+        const res = await serverFetch(`/api/favorite/`,{
+        method:'DELETE',
+        headers: {
+                "Content-Type": "application/json"
+            },
+        body: JSON.stringify({menu_item: id})
+    })
+    return {success:true, data: await res.json()}
+    }catch(error){
+        return {success:false, data: error}
+    }
+}

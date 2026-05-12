@@ -13,7 +13,7 @@ export default function Date() {
     const [timeError,setTimeError] = useState<boolean>(false)
     const [guestsError,setGuestsError] = useState<boolean>(false)
     const router = useRouter(); 
-    const handleSumbit=(e: React.FormEvent<HTMLFormElement>)=>{
+    const handleSumbit =(e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
         if(!selectedDate){
             setDateError(true)
@@ -23,7 +23,7 @@ export default function Date() {
             setTimeError(true)
             return;
         }
-        if(selectedGuests < 0){
+        if(selectedGuests <= 0 || !selectedGuests){
             setGuestsError(true)
             return;
         }

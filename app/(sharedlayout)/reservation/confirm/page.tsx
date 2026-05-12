@@ -31,7 +31,7 @@ export default function Page() {
     })
     }
     return(
-        <section className="flex-1 lg:w-3/4 w-full flex flex-col gap-10">
+        <section className="flex-1 lg:w-3/4 w-full flex flex-col justify-center items-center gap-10">
             <div className="w-full h-fit p-4 flex lg:flex-row flex-col-reverse max-lg:gap-5 lg:justify-between items-center rounded lg:shadow">
                 <div className=" flex flex-col gap-5 max-lg:w-full max-lg:px-2">
                     <div className="flex lg:flex-col max-lg:justify-between">
@@ -83,7 +83,7 @@ export default function Page() {
                 </div>
             </div>
             <div className="lg:w-1/2 w-full flex justify-between items-center max-lg:px-2">
-                <Link href="/reservation/table"><ChevronLeft/>Back</Link>
+                <Link className='flex gap-2' href="/reservation/table"><ChevronLeft/>Back</Link>
                 <button disabled={pending}  onClick={()=>handleSubmit()} className="bg-primary lg:px-5 px-3 lg:py-2 py-1 text-tertiary lg:text-base text-xs" type="submit">Confirm</button>
             </div>
         </section>
