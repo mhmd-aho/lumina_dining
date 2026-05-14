@@ -104,12 +104,8 @@ export async function favoriteAction(id:number){
 }
 export async function unfavoriteAction(id:number){
     try{
-        const res = await serverFetch(`/api/favorite/`,{
+        const res = await serverFetch(`/api/favorite/${id}/`,{
         method:'DELETE',
-        headers: {
-                "Content-Type": "application/json"
-            },
-        body: JSON.stringify({menu_item: id})
     })
     return {success:true, data: await res.json()}
     }catch(error){

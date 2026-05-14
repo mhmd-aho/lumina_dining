@@ -2,7 +2,16 @@ import Categories from "@/components/categories";
 import Link from "next/link";
 import { CategoryProvider } from "@/lib/context/categoryContext";
 import MenuItemsDisplay from "@/components/menu-items-display";
-export default function Home() {
+import { serverFetch } from "@/lib/server-fetch";
+export default async function Home() {
+  let data
+  try{
+    const res = await serverFetch(`/api/favorite/`);
+    data = await res.json();
+    console.log(data);
+  }catch(error){
+    console.log(error);
+  }
   return (
     <main>
       <section className="h-[calc(100vh-3.5rem)] bg-center bg-cover max-lg:flex  max-lg:flex-col max-lg:justify-end" style={{backgroundImage:"url('/landing-page-bg.jpg')"}}>
@@ -17,7 +26,7 @@ export default function Home() {
         <div className="flex-1 max-sm:flex-col w-full flex gap-8 lg:px-10 sm:px-6 px-4">
           <CategoryProvider>
             <Categories />
-            <MenuItemsDisplay />
+            <MenuItemsDisplay favoritedItems={data} />
           </CategoryProvider>
         </div>
       </section>

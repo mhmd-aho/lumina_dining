@@ -45,3 +45,8 @@ export const registerSchema = z.object({
     message: "Password don't match",
     path: ["re_password"]
 });
+export type FavoriteType = {
+    id:number,
+    menu_item:MenuItemType
+    user:UserType
+}
