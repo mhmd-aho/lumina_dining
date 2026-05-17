@@ -24,7 +24,7 @@ export default function Page() {
         })
         if(res.success){
             console.log(res.data)
-            router.push('/')
+            router.push('/reservation/done')
         }else{
             console.log(res.data)
         }

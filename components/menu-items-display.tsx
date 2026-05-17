@@ -2,8 +2,8 @@
 import MenuCard from "./menu-card";
 import { useState, useEffect } from "react";
 import { useCategory } from "@/lib/context/categoryContext";
-import { MenuItemType, FavoriteType } from "@/lib/schemas";
-export default function MenuItemsDisplay({favoritedItems}: {favoritedItems: FavoriteType[]}){
+import { MenuItemType, FavoriteType, UserType } from "@/lib/schemas";
+export default function MenuItemsDisplay({user,favoritedItems}: {user: UserType,favoritedItems: FavoriteType[]}){
     const {selectedCategory} = useCategory();
     const [menuItems,setMenuItems] = useState<MenuItemType[]>([]);
     useEffect(() =>{
@@ -24,8 +24,11 @@ export default function MenuItemsDisplay({favoritedItems}: {favoritedItems: Favo
     return(
          <div className="h-full flex-1 grid lg:grid-cols-3 grid-cols-1 lg:gap-20 gap-8">
                       {menuItems.map((item) => {
+                        if(user === null || typeof user === 'string'){
+                            return <MenuCard user={user} key={item.id} item={item}/>
+                        }
                         const isFavorited = favoritedItems.find((favorite) => favorite.menu_item.id === item.id);
-                        return <MenuCard key={item.id} item={item} isFavorited={isFavorited}/>
+                        return <MenuCard user={user} key={item.id} item={item} isFavorited={isFavorited}/>
                       })}
         </div>
     )

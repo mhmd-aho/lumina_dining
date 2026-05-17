@@ -7,6 +7,7 @@ import { z } from "zod";
 import { signinAction } from "@/app/action";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
+import PasswordInput from "@/components/password-input";
 export default function Page() {
     const router = useRouter();
     const [pending,startTransition] = useTransition();
@@ -42,10 +43,11 @@ export default function Page() {
                     <p className="text-neutral">Please enter your details to access your account</p>
                 </div>
                 <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col gap-2">
-                    <input {...register('username')} className="border border-neutral/50 p-2" type="text" placeholder="Email" />
-                    {errors.username && <span className="text-sm text-red-500">{errors.username.message}</span>}
-                    <input {...register('password')} className="border border-neutral/50 p-2" type="password" placeholder="Password" />
-                    {errors.password && <span className="text-sm text-red-500">{errors.password.message}</span>}
+                    <div className="relative">
+                        <input {...register('username')} className="border border-neutral/50 p-2 w-full" type="text" placeholder="Username" />
+                        {errors.username && <span className="absolute -bottom-1  left-1 text-xs text-red-500 bg-tertiary">{errors.username.message}</span>}
+                    </div>
+                    <PasswordInput register={register} name="password" errors={errors} placeholder="password"/>
                     <button disabled={pending} className="bg-primary lg:px-5 px-3 lg:py-2 py-1 text-tertiary lg:text-base text-xs" type="submit">Sign in</button>
                 </form>
                 <div className="flex items-center gap-2">

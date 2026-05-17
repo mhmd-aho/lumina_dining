@@ -7,6 +7,7 @@ import { z } from "zod";
 import { signupAction } from "@/app/action";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
+import PasswordInput from "@/components/password-input";
 export default function Page() {
     const router = useRouter();
     const [pending,startTransition] = useTransition();
@@ -44,14 +45,16 @@ export default function Page() {
                     <p className="text-neutral">Please enter your details to create<br/> an account</p>
                 </div>
                 <form onSubmit={handleSubmit(handleSignup)} className="flex flex-col gap-2">
-                    <input {...register('username')} className="border border-neutral/50 p-2" type="text" placeholder="Username" />
-                    {errors.username && <span className="text-sm text-red-500">{errors.username.message}</span>}
-                    <input {...register('email')} className="border border-neutral/50 p-2" type="email" placeholder="Email" />
-                    {errors.email && <span className="text-sm text-red-500">{errors.email.message}</span>}
-                    <input {...register('password')} className="border border-neutral/50 p-2" type="password" placeholder="Password" />
-                    {errors.password && <span className="text-sm text-red-500">{errors.password.message}</span>}
-                    <input {...register('re_password')} className="border border-neutral/50 p-2" type="password" placeholder="Confirm Password" />
-                    {errors.re_password && <span className="text-sm text-red-500">{errors.re_password.message}</span>}
+                    <div className="relative">
+                        <input {...register('username')} className="border border-neutral/50 p-2 w-full" type="text" placeholder="Username" />
+                        {errors.username && <span className="absolute -bottom-1  left-1 text-xs text-red-500 bg-tertiary">{errors.username.message}</span>}
+                    </div>
+                    <div className="relative">
+                        <input {...register('email')} className="border border-neutral/50 p-2 w-full" type="email" placeholder="Email" />
+                        {errors.email && <span className="absolute -bottom-1  left-1 text-xs text-red-500 bg-tertiary">{errors.email.message}</span>}
+                    </div>
+                    <PasswordInput register={register} errors={errors} name="password" placeholder="Password" />
+                    <PasswordInput register={register} errors={errors} name="re_password" placeholder="Confirm Password" />
                     <button disabled={pending} className="bg-primary lg:px-5 px-3 lg:py-2 py-1 text-tertiary lg:text-base text-xs" type="submit">Sign up</button>
                 </form>
                 <div className="flex items-center gap-2">

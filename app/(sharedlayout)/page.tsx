@@ -3,7 +3,9 @@ import Link from "next/link";
 import { CategoryProvider } from "@/lib/context/categoryContext";
 import MenuItemsDisplay from "@/components/menu-items-display";
 import { serverFetch } from "@/lib/server-fetch";
+import { getUser } from "@/lib/user";
 export default async function Home() {
+  const user = await getUser();
   let data
   try{
     const res = await serverFetch(`/api/favorite/`,{next:{tags:["favorite"]}});
@@ -25,7 +27,7 @@ export default async function Home() {
         <div className="flex-1 max-sm:flex-col w-full flex gap-8 lg:px-10 sm:px-6 px-4">
           <CategoryProvider>
             <Categories />
-            <MenuItemsDisplay favoritedItems={data} />
+            <MenuItemsDisplay user={user} favoritedItems={data} />
           </CategoryProvider>
         </div>
       </section>

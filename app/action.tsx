@@ -1,5 +1,5 @@
 "use server"
-import { ReservationFormSchema,signinSchema,registerSchema, userProfileSchema } from "@/lib/schemas";
+import { ReservationFormSchema,signinSchema,registerSchema,passwordUpdateSchema } from "@/lib/schemas";
 import { serverFetch } from "@/lib/server-fetch";
 import { updateTag } from "next/cache";
 import { cookies } from "next/headers";
@@ -50,7 +50,44 @@ export async function signupAction(data:z.infer<typeof registerSchema>){
         return {success: false, error: 'Network error or internal server error'}
     }
 }
-export async function changePasswordAction(data:z.infer<typeof userProfileSchema>){
+export async function logoutAction(){
+    try{
+        const res = await serverFetch('/auth/token/logout/',{
+        method:'POST',
+        headers: {
+                "Content-Type": "application/json"
+            },
+        })
+        if(!res.ok){
+            throw new Error('logout failed')
+        }
+        const cookieStore = await cookies();
+        cookieStore.delete("token");
+        return {success: true, data: 'logout success'};
+    }catch(error){
+        return {success: false, data: error};
+    }
+}
+export async function deleteUserAction(password:string){
+    try{
+        const res = await serverFetch('/auth/users/me/',{
+        method:'DELETE',
+        headers: {
+                "Content-Type": "application/json"
+            },
+        body: JSON.stringify({current_password: password})
+        })
+        if(!res.ok){
+            throw new Error('delete user failed')
+        }
+        const cookieStore = await cookies();
+        cookieStore.delete("token");
+        return {success: true, data: 'logout success'};
+    }catch(error){
+        return {success: false, data: error};
+    }
+}
+export async function changePasswordAction(data:z.infer<typeof passwordUpdateSchema>){
     try{
         const res = await serverFetch('/auth/users/set_password/',{
         method:'POST',

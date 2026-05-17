@@ -1,6 +1,8 @@
 import { getUser } from "@/lib/user";
-import { Shield, ShieldEllipsis, User } from "lucide-react";
+import { Shield, User } from "lucide-react";
 import Link from "next/link";
+import { LogoutButton } from "@/components/logout-button";
+import DeleteAccountButton from "@/components/delete-account";
 
 export default async function Account() {
   const user = await getUser();
@@ -38,13 +40,9 @@ export default async function Account() {
           <div className="bg-slate-50 border border-slate-200 rounded-lg p-6">
             <h2 className="text-sm font-bold text-slate-800 uppercase mb-4">Account Actions</h2>
             <div className="flex flex-col gap-3">
-              <button className="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-white hover:text-primary rounded-md transition-all">
-                Logout
-              </button>
+              <LogoutButton/>
               <div className="pt-4 border-t border-slate-200">
-                <button className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-all">
-                  Delete Account
-                </button>
+                <DeleteAccountButton/>
               </div>
             </div>
           </div>
