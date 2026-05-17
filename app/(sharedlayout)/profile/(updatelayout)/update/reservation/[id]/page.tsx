@@ -11,8 +11,6 @@ export default async function Page({params}: {params: Promise<{id: string}>}){
         console.log(err)
     }
     return(
-        <section className="h-[calc(100vh-3.5rem)] flex flex-col items-center justify-center bg-tertiary">
-            <UpdateForm data={data}/>
-        </section>
+        <UpdateForm data={data}/>
     )
 }

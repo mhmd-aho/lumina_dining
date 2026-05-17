@@ -50,3 +50,15 @@ export type FavoriteType = {
     menu_item:MenuItemType
     user:UserType
 }
+export const userProfileSchema = z.object({
+    username: z.string().min(3, 'username is too short'),
+    email: z.string().email(),
+})
+export const passwordUpdateSchema = z.object({
+    current_password: z.string().min(8, "password is too short"),
+    new_password: z.string().min(8, "password is too short"),
+    re_new_password: z.string().min(8, "password is too short"),
+}).refine((data) => data.new_password === data.re_new_password, {
+    message: "Password don't match",
+    path: ["re_new_password"]   
+})

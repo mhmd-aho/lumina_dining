@@ -6,7 +6,7 @@ export default async function Favorites() {
   let favorites: FavoriteType[] = [];
   
   try {
-    const res = await serverFetch('/api/favorite/', { method: "GET" });
+    const res = await serverFetch('/api/favorite/', { method: "GET" ,next:{tags:["favorite"]}});
     if (res.ok) {
       favorites = await res.json();
     }

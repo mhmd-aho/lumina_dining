@@ -1,5 +1,6 @@
 import { getUser } from "@/lib/user";
 import { Shield, ShieldEllipsis, User } from "lucide-react";
+import Link from "next/link";
 
 export default async function Account() {
   const user = await getUser();
@@ -24,16 +25,13 @@ export default async function Account() {
                 <p className="text-slate-700 font-medium">{user.email}</p>
               </div>
             </div>
-            <button className="mt-6 bg-secondary px-4 py-2 text-primary hover:opacity-90 transition-all text-sm font-medium rounded-md">
-              Update Profile
-            </button>
           </div>
           <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
             <h2 className="text-lg font-semibold mb-4 border-b pb-2 flex gap-2 items-center"><Shield className="size-4 sm:size-5 text-secondary"/> Security</h2>
             <p className="text-sm text-slate-500 mb-4">Keep your account secure by updating your password regularly.</p>
-            <button className="bg-slate-100 hover:bg-slate-200 px-4 py-2 text-slate-700 text-sm font-medium rounded-md transition-colors">
+            <Link href="/profile/update/password" className="bg-slate-100 hover:bg-slate-200 px-4 py-2 text-slate-700 text-sm font-medium rounded-md transition-colors">
               Update Password
-            </button>
+            </Link>
           </div>
         </div>
         <div className="space-y-6">

@@ -1,6 +1,7 @@
 "use server"
-import { ReservationFormSchema,signinSchema,registerSchema } from "@/lib/schemas";
+import { ReservationFormSchema,signinSchema,registerSchema, userProfileSchema } from "@/lib/schemas";
 import { serverFetch } from "@/lib/server-fetch";
+import { updateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { z } from "zod";
 export async function signinAction(data: z.infer<typeof signinSchema>){
@@ -49,11 +50,25 @@ export async function signupAction(data:z.infer<typeof registerSchema>){
         return {success: false, error: 'Network error or internal server error'}
     }
 }
+export async function changePasswordAction(data:z.infer<typeof userProfileSchema>){
+    try{
+        const res = await serverFetch('/auth/users/set_password/',{
+        method:'POST',
+        headers: {
+                "Content-Type": "application/json"
+            },
+        body: JSON.stringify(data)
+    })
+    return {success:true, data: await res.json()}
+    }catch(error){
+        return {success:false, data: error}
+    }
+}
 export async function postReservation(data:z.infer<typeof ReservationFormSchema>){
     try{
         const res = await serverFetch('/api/reserve/',{
-        method:'POST',
-        headers: {
+            method:'POST',
+            headers: {
                 "Content-Type": "application/json"
             },
         body: JSON.stringify(data)
@@ -95,8 +110,9 @@ export async function favoriteAction(id:number){
         headers: {
                 "Content-Type": "application/json"
             },
-        body: JSON.stringify({menu_item: id})
+        body: JSON.stringify({item_id: id})
     })
+    updateTag('favorite');
     return {success:true, data: await res.json()}
     }catch(error){
         return {success:false, data: error}
@@ -107,6 +123,7 @@ export async function unfavoriteAction(id:number){
         const res = await serverFetch(`/api/favorite/${id}/`,{
         method:'DELETE',
     })
+    updateTag('favorite');
     return {success:true, data: await res.json()}
     }catch(error){
         return {success:false, data: error}
