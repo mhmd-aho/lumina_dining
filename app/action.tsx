@@ -166,3 +166,23 @@ export async function unfavoriteAction(id:number){
         return {success:false, data: error}
     }
 }
+export async function getAllReservations(start:string,end:string){
+    try{
+        const res = await serverFetch(`/api/allreservations/?start_date=${start}&end_date=${end}`,{
+        method:'GET'
+    })
+    return {success:true, data: await res.json()}
+    }catch(error){
+        return {success:false, data: error}
+    }
+}
+export async function getAllTables(){
+    try{
+        const res = await serverFetch('/api/tables/',{
+        method:'GET'
+    })
+    return {success:true, data: await res.json()}
+    }catch(error){
+        return {success:false, data: error}
+    }
+}

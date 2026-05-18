@@ -27,7 +27,7 @@ export default function Date() {
             setGuestsError(true)
             return;
         }
-        localStorage.setItem('selected-date',selectedDate + " " + selectedTime)
+        localStorage.setItem('selected-date',selectedDate + "T" + selectedTime)
         localStorage.setItem('selected-guests',selectedGuests + "")
         router.push('/reservation/table')
     }

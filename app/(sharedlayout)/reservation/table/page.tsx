@@ -1,11 +1,46 @@
 "use client"
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { getAllReservations,getAllTables } from "@/app/action";
+import type { TableType } from "@/lib/schemas";
 export default function Page() {
     const [selectedTable,setSelectedTable] = useState<number | null>(null);
     const [error,setError] = useState<boolean>(false);
+    const date = localStorage.getItem('selected-date')
+    const guestsNumber = Number(localStorage.getItem('guests'))
+    const notForLounge = guestsNumber < 6
+    const [tables,setTables] = useState<Array<{id:number}>>([])
+    const [reservations,setReservations] = useState<Array<{table: number}>>([])
+    const targetDate = new Date(date)   
+    const hourAndHalf = 90 * 60 * 1000
+    const startTargetDate = new Date(targetDate.getTime() - hourAndHalf).toISOString()
+    const endTargetDate = new Date(targetDate.getTime() + hourAndHalf).toISOString()
+
+    useEffect(() => {
+        const getReservations = async ()=>{
+            if(!date){
+                return
+            }
+            const response = await getAllReservations(startTargetDate,endTargetDate)
+            if(response.success){
+                setReservations(response.data)
+            }else{
+                console.log('error in get allreservations')
+            }
+        }
+        const getTables = async () =>{
+            const response = await getAllTables()
+            if(response.success){
+                setTables(response.data)
+            }else{
+                console.log('error in get all tables')
+            }
+        }
+      getTables();
+      getReservations();
+    }, [date,startTargetDate,endTargetDate]);
     const router = useRouter();
     const handleTableSelect = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -42,44 +77,46 @@ export default function Page() {
                             </div>
                         </div>
                     </div>
-                    <div className="flex-1 h-full shadow max-lg:overflow-x-scroll">
-                        <div className="lg:w-full w-[1000px]   flex justify-center flex-wrap gap-40 py-4">
-                            <button onClick={() => setSelectedTable(1)} className={`size-16 rounded  border-3 border-secondary flex items-center justify-center ${selectedTable === 1 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
-                                <p>T01</p>
-                            </button>
-                            <button onClick={() => setSelectedTable(2)} className={`size-16 rounded bg-neutral flex items-center justify-center ${selectedTable === 2 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
-                                <p>T02</p>
-                            </button>
-                            <button onClick={() => setSelectedTable(3)} className={`size-16 rounded  border-3 border-secondary flex items-center justify-center ${selectedTable === 3 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
-                                <p>T03</p>
-                            </button>
-                            <button onClick={() => setSelectedTable(4)} className={`size-16 rounded border-3 border-secondary flex items-center justify-center ${selectedTable === 4 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
-                                <p>T04</p>
-                            </button>
-                            <button onClick={() => setSelectedTable(5)} className={`size-16 rounded  border-3 border-secondary flex items-center justify-center ${selectedTable === 5 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
-                                <p>T05</p>
-                            </button>
-                            <button onClick={() => setSelectedTable(6)} className={`size-16 rounded border-3 border-secondary flex items-center justify-center ${selectedTable === 6 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
-                                <p>T06</p>
-                            </button>
-                            <button onClick={() => setSelectedTable(7)} className={`size-16 rounded border-3 border-secondary flex items-center justify-center ${selectedTable === 7 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
-                                <p>T07</p>
-                            </button>
-                            <button onClick={() => setSelectedTable(8)} className={`size-16 rounded  border-3 border-secondary flex items-center justify-center ${selectedTable === 8 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
-                                <p>T08</p>
-                            </button>
-                            <button onClick={() => setSelectedTable(9)} className={`size-16 rounded border-3 border-secondary flex items-center justify-center ${selectedTable === 9 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
-                                <p>T09</p>
-                            </button>
-                            <button onClick={() => setSelectedTable(10)} className={`size-16 rounded  border-3 border-secondary flex items-center justify-center ${selectedTable === 10 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
-                                <p>T10</p>
-                            </button>
-                            <button onClick={() => setSelectedTable(11)} className={`h-16 w-32 rounded border-3 border-secondary flex items-center justify-center ${selectedTable === 11 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
-                                <p>Lounge A</p>
-                            </button>
-                            <button onClick={() => setSelectedTable(12)} className={`h-16 w-32 rounded  border-3 border-secondary flex items-center justify-center ${selectedTable === 12 ? 'bg-secondary text-tertiary scale-125' : 'text-secondary'}`}>
-                                <p>Lounge B</p>
-                            </button>
+                    <div className="flex-1 h-full max-lg:w-full shadow max-lg:overflow-x-scroll">
+                        <div className="lg:w-full w-[1000px] grid grid-cols-5 justify-center gap-40 p-4">
+                            {tables.map((table:TableType)=>{
+                                const isReserved = reservations.some((r)=>r.table === table.id)
+                                return(
+                                    <button 
+                                    disabled={isReserved || (notForLounge && table.table_number > 10)} 
+                                    key={table.id} 
+                                    onClick={() => {
+                                        if (isReserved) return; 
+                                        setSelectedTable(table.id);
+                                    }} 
+                                    className={`
+                                        ${table.capacity === 6 ? 'w-32 h-16' : 'size-16'} 
+                                        ${table.table_number === 11 
+                                                                        ? `col-start-1 col-span-2 place-self-center lg:place-self-end ${notForLounge ? 'opacity-40' : ''}` 
+                                                                        : ''
+                                                                    }
+
+                                                                    ${table.table_number === 12 
+                                                                        ? `col-start-4 col-span-2 place-self-center ${notForLounge ? 'opacity-40' : ''}` 
+                                                                        : ''
+                                                                    }
+
+                                                                    font-bold rounded border-3 border-secondary flex items-center justify-center transition-all duration-200
+                                                                    
+                                                                    ${isReserved 
+                                                                        ? 'bg-neutral border-none text-tertiary opacity-50 cursor-not-allowed' 
+                                                                        : (notForLounge && table.table_number > 10)
+                                                                            ? 'border-secondary/40 text-secondary/40 cursor-not-allowed'
+                                                                            : selectedTable === table.id 
+                                                                                ? 'bg-secondary text-tertiary scale-110 shadow-lg cursor-pointer' 
+                                                                                : 'text-secondary cursor-pointer active:bg-secondary/10 lg:hover:bg-secondary/10'
+                                                                    }
+                                                                `}
+                                                            >
+                                    <p>T {table.table_number}</p>
+                                </button>
+                                )
+                            })}
                         </div>
                     </div>
                 </div>

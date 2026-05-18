@@ -2,6 +2,7 @@
 import { deleteUserAction } from "@/app/action";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 export default function DeleteAccountButton(){
     const [popup, setPopup] = useState(false);
     const [password, setPassword] = useState("");
@@ -18,11 +19,11 @@ export default function DeleteAccountButton(){
     async function deleteAccountAction(){
         const res = await deleteUserAction(password);
         if(res.success){
-            console.log("success")
+            toast.success("account deleted successfully")
             router.push("/")
             setPopup(false)
         }else{
-            console.log("failed")
+            toast.error("failed to delete account")
         }
     }
     

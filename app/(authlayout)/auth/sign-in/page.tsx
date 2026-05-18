@@ -8,6 +8,7 @@ import { signinAction } from "@/app/action";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import PasswordInput from "@/components/password-input";
+import { toast } from "sonner";
 export default function Page() {
     const router = useRouter();
     const [pending,startTransition] = useTransition();
@@ -23,13 +24,13 @@ export default function Page() {
             try{
                 const res = await signinAction(data);
                 if(res.success){
-                    console.log('signing in')
+                    toast.success('welcome back')
                     router.push('/');
                 }else{
-                    console.log(res.error)
+                 toast.error('failed to sign in')
                 }
             }catch(err){
-                console.log(err)
+                toast.error('failed to sign in')
             }finally{
                 reset()
             }

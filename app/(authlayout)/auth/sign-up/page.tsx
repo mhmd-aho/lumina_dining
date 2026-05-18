@@ -8,6 +8,7 @@ import { signupAction } from "@/app/action";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import PasswordInput from "@/components/password-input";
+import { toast } from "sonner";
 export default function Page() {
     const router = useRouter();
     const [pending,startTransition] = useTransition();
@@ -25,13 +26,13 @@ export default function Page() {
             try{
                 const res = await signupAction(data);
                 if(res.success){
-                    console.log('signing up')
+                    toast.success('account created successfully')
                     router.push('/auth/sign-in');
                 }else{
-                    console.log(res.error)
+                    toast.error('failed to create account')
                 }
             }catch(err){
-                console.log(err)
+                toast.error('failed to create account')
             }finally{
                 reset()
             }

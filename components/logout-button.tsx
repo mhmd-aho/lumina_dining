@@ -1,14 +1,16 @@
 'use client'
 import { logoutAction } from "@/app/action";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 export function LogoutButton(){
     const router = useRouter();
     const handleLogout =async ()=>{
         try{
             await logoutAction();
+            toast.success('logged out successfully')
             router.push('/')  
         }catch(error){
-            console.log(error);
+            toast.error(error as string)
         }
     }
     return(

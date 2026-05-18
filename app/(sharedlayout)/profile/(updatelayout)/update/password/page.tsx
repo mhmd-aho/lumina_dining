@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { changePasswordAction } from "@/app/action";
 import PasswordInput from "@/components/password-input";
+import { toast } from "sonner";
 export default function Page(){
     const {register, handleSubmit, formState: {errors},reset} = useForm<z.infer<typeof passwordUpdateSchema>>({
         resolver: zodResolver(passwordUpdateSchema),
@@ -17,9 +18,9 @@ export default function Page(){
     async function onSubmit(data:z.infer<typeof passwordUpdateSchema>){
     const res = await changePasswordAction(data);
     if(res.success){
-      console.log("success")
+      toast.success("password updated successfully")
     }else{
-        console.log("failed")
+        toast.error("failed to update password")
     }
     reset()
   }

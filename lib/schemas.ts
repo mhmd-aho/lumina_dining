@@ -62,3 +62,9 @@ export const passwordUpdateSchema = z.object({
     message: "Password don't match",
     path: ["re_new_password"]   
 })
+
+export type TableType = {
+    id:number,
+    table_number:number,
+    capacity:number,
+}

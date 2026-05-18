@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation";
 import { useTransition } from "react"
 import { postReservation } from "@/app/action"
+import { toast } from "sonner";
 export default function Page() {
     const date = localStorage.getItem('selected-date')
     const guests = localStorage.getItem('selected-guests');
@@ -18,15 +19,14 @@ export default function Page() {
     }
       startTransition(async ()=>{
         const res = await postReservation({
-            booking_time: date.replace(" ", "T"), // Format to ISO-8601 for Django DateTimeField
+            booking_time: date,
             guests:Number(guests),
             table: Number(table)
         })
         if(res.success){
-            console.log(res.data)
             router.push('/reservation/done')
         }else{
-            console.log(res.data)
+            toast.error(res.data?.status as string)
         }
     })
     }

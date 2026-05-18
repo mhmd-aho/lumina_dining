@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Inter,Noto_Serif } from "next/font/google";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const notoserif = Noto_Serif({ subsets: ["latin"], variable: "--font-notoserif" });
@@ -22,6 +23,7 @@ export default function RootLayout({
     >
       <body className={`${inter.className} min-h-full flex flex-col`}>
         {children}
+        <Toaster duration={3000} position="top-center"  toastOptions={{style:{background:'#422521',borderStyle:'solid',borderColor:'#81392B',color:'white'}}}/>
       </body>
     </html>
   );
