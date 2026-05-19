@@ -4,6 +4,22 @@ import { serverFetch } from "@/lib/server-fetch";
 import { updateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { z } from "zod";
+const apiErrors=(data:any)=>{
+    if(data?.non_field_errors)
+        return data.non_field_errors[0]
+    for(const key in data){
+        if(data[key]&&typeof data[key]=== 'string')
+            return data[key]
+        if(Array.isArray(data[key])&& data[key].length>0)
+            return data[key][0]
+        if(typeof data[key]=== 'object' && data[key]!== null){
+            const nestedErr=apiErrors(data[key])
+            if(nestedErr)
+                return nestedErr
+        }
+    }
+    return null
+}
 export async function signinAction(data: z.infer<typeof signinSchema>){
      try{
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/token/login/`, {
@@ -25,8 +41,8 @@ export async function signinAction(data: z.infer<typeof signinSchema>){
             path: "/",
         });
         return { success: true, data: resData };
-    }catch{
-        return {success: false, error: 'sign in failed'}
+    }catch(error){
+        return {success: false, error: apiErrors(error)}
     }
 }
 export async function signupAction(data:z.infer<typeof registerSchema>){
@@ -41,13 +57,11 @@ export async function signupAction(data:z.infer<typeof registerSchema>){
         const isJson = res.headers.get('content-type')?.includes('application/json');
         const resData = isJson? await res.json() : null;
         if (!res.ok) {
-            console.error("Backend error response:", resData);
-            return { success: false, error: resData || 'sign up failed' };
+            return { success: false, error: apiErrors(resData) };
         }
         return {success: true, data: resData};
     }catch(error){
-        console.error("Fetch error:", error);
-        return {success: false, error: 'Network error or internal server error'}
+        return {success: false, error: apiErrors(error)}
     }
 }
 export async function logoutAction(){
@@ -58,14 +72,16 @@ export async function logoutAction(){
                 "Content-Type": "application/json"
             },
         })
-        if(!res.ok){
-            throw new Error('logout failed')
+        const isJson = res.headers.get('content-type')?.includes('application/json');
+        const resData = isJson? await res.json() : null;
+        if (!res.ok) {
+            return { success: false, error: apiErrors(resData) };
         }
         const cookieStore = await cookies();
         cookieStore.delete("token");
-        return {success: true, data: 'logout success'};
+        return {success: true, data: resData};
     }catch(error){
-        return {success: false, data: error};
+        return {success: false, error: apiErrors(error)};
     }
 }
 export async function deleteUserAction(password:string){
@@ -77,14 +93,16 @@ export async function deleteUserAction(password:string){
             },
         body: JSON.stringify({current_password: password})
         })
-        if(!res.ok){
-            throw new Error('delete user failed')
+        const isJson = res.headers.get('content-type')?.includes('application/json');
+        const resData = isJson? await res.json() : null;
+        if (!res.ok) {
+            return { success: false, error: apiErrors(resData) };
         }
         const cookieStore = await cookies();
         cookieStore.delete("token");
-        return {success: true, data: 'logout success'};
+        return {success: true, data: resData};
     }catch(error){
-        return {success: false, data: error};
+        return {success: false, error: apiErrors(error)};
     }
 }
 export async function changePasswordAction(data:z.infer<typeof passwordUpdateSchema>){
@@ -96,9 +114,14 @@ export async function changePasswordAction(data:z.infer<typeof passwordUpdateSch
             },
         body: JSON.stringify(data)
     })
-    return {success:true, data: await res.json()}
+    const isJson = res.headers.get('content-type')?.includes('application/json');
+    const resData = isJson? await res.json() : null;
+    if (!res.ok) {
+        return { success: false, error: apiErrors(resData) };
+    }
+    return {success: true, data: resData};
     }catch(error){
-        return {success:false, data: error}
+        return {success: false, error: apiErrors(error)};
     }
 }
 export async function postReservation(data:z.infer<typeof ReservationFormSchema>){
@@ -110,9 +133,13 @@ export async function postReservation(data:z.infer<typeof ReservationFormSchema>
             },
         body: JSON.stringify(data)
     })
-    return {success:true, data: await res.json()}
+    const resData = await res.json();
+    if (!res.ok) {
+        return { success: false, error: apiErrors(resData) };
+    }
+    return {success: true, data: resData};
     }catch(error){
-        return {success:false, data: error}
+        return {success: false, error: apiErrors(error)};
     }
     
 }
@@ -121,9 +148,13 @@ export async function deleteReservation(id:number){
         const res = await serverFetch(`/api/reserve/${id}/`,{
         method:'DELETE'
     })
-    return {success:true, data: await res.json()}
+    const resData = await res.json();
+    if (!res.ok) {
+        return { success: false, error: apiErrors(resData) };
+    }
+    return {success: true, data: resData};
     }catch(error){
-        return {success:false, data: error}
+        return {success: false, error: apiErrors(error)};
     }
 }
 export async function updateReservation(id:number,data:z.infer<typeof ReservationFormSchema>){
@@ -135,9 +166,13 @@ export async function updateReservation(id:number,data:z.infer<typeof Reservatio
             },
         body: JSON.stringify(data)
     })
-    return {success:true, data: await res.json()}
+    const resData = await res.json();
+    if (!res.ok) {
+        return { success: false, error: apiErrors(resData) };
+    }
+    return {success: true, data: resData};
     }catch(error){
-        return {success:false, data: error}
+        return {success: false, error: apiErrors(error)};
     }
 }
 export async function favoriteAction(id:number){
@@ -150,9 +185,13 @@ export async function favoriteAction(id:number){
         body: JSON.stringify({item_id: id})
     })
     updateTag('favorite');
-    return {success:true, data: await res.json()}
+    const resData = await res.json();
+    if (!res.ok) {
+        return { success: false, error: apiErrors(resData) };
+    }
+    return {success: true, data: resData};
     }catch(error){
-        return {success:false, data: error}
+        return {success: false, error: apiErrors(error)};
     }
 }
 export async function unfavoriteAction(id:number){
@@ -161,9 +200,13 @@ export async function unfavoriteAction(id:number){
         method:'DELETE',
     })
     updateTag('favorite');
-    return {success:true, data: await res.json()}
+    const resData = await res.json();
+    if (!res.ok) {
+        return { success: false, error: apiErrors(resData) };
+    }
+    return {success: true, data: resData};
     }catch(error){
-        return {success:false, data: error}
+        return {success: false, error: apiErrors(error)};
     }
 }
 export async function getAllReservations(start:string,end:string){
@@ -171,9 +214,13 @@ export async function getAllReservations(start:string,end:string){
         const res = await serverFetch(`/api/allreservations/?start_date=${start}&end_date=${end}`,{
         method:'GET'
     })
-    return {success:true, data: await res.json()}
+    const resData = await res.json();
+    if (!res.ok) {
+        return { success: false, error: apiErrors(resData) };
+    }
+    return {success: true, data: resData};
     }catch(error){
-        return {success:false, data: error}
+        return {success: false, error: apiErrors(error)};
     }
 }
 export async function getAllTables(){
@@ -181,8 +228,12 @@ export async function getAllTables(){
         const res = await serverFetch('/api/tables/',{
         method:'GET'
     })
-    return {success:true, data: await res.json()}
+    const resData = await res.json();
+    if (!res.ok) {
+        return { success: false, error: apiErrors(resData) };
+    }
+    return {success: true, data: resData};
     }catch(error){
-        return {success:false, data: error}
+        return {success: false, error: apiErrors(error)};
     }
 }

@@ -2,15 +2,8 @@ import { serverFetch } from "@/lib/server-fetch";
 import { ReservetionType } from "@/lib/schemas";
 import ReservationCard from "@/components/reservation-card";
 export default async function Profile() {
-  let reservations: ReservetionType[] | undefined;
-  
-  try {
     const res = await serverFetch('/api/reserve/', { method: "GET" });
-    const data = await res.json();
-    reservations = data;
-  } catch (err) {
-    console.log(err);
-  }
+    const reservations : ReservetionType[] = await res.json();
 
   return (
     <div className="flex-1 max-w-4xl mx-auto w-full px-6 py-10">

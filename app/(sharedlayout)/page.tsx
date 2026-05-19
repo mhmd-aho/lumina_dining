@@ -6,12 +6,10 @@ import { serverFetch } from "@/lib/server-fetch";
 import { getUser } from "@/lib/user";
 export default async function Home() {
   const user = await getUser();
-  let data
-  try{
+  let data;
+  if(typeof user !== "string"){
     const res = await serverFetch(`/api/favorite/`,{next:{tags:["favorite"]}});
     data = await res.json();
-  }catch(error){
-    console.log(error);
   }
   return (
     <main>

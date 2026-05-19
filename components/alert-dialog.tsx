@@ -10,7 +10,7 @@ export default function AlertDialog({id}: {id: number}){
             toast.success("reservation deleted successfully")
             setOpen(false)
         }else{
-            toast.error("failed to delete reservation")
+            toast.error(res.error as string)
         }
     }
     useEffect(()=>{

@@ -5,29 +5,40 @@ import { useState,useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getAllReservations,getAllTables } from "@/app/action";
 import type { TableType } from "@/lib/schemas";
+import { toast } from "sonner";
 export default function Page() {
+    const [date,setDate] = useState<string | null>(null)
+    const [guests,setGuests] = useState<string | null>(null)
+    const router = useRouter();
+    useEffect(() => {
+        const savedDate = localStorage.getItem('selected-date')
+        const savedGuests = localStorage.getItem('selected-guests')
+        if(!savedDate || !savedGuests){
+            toast.error('Please select a date and time')
+            router.push('/reservation/date')
+            return
+        }
+        setDate(savedDate)
+        setGuests(savedGuests)
+    }, [])
     const [selectedTable,setSelectedTable] = useState<number | null>(null);
     const [error,setError] = useState<boolean>(false);
-    const date = localStorage.getItem('selected-date')
-    const guestsNumber = Number(localStorage.getItem('guests'))
+    const guestsNumber = Number(guests)
     const notForLounge = guestsNumber < 6
     const [tables,setTables] = useState<Array<{id:number}>>([])
     const [reservations,setReservations] = useState<Array<{table: number}>>([])
-    const targetDate = new Date(date)   
-    const hourAndHalf = 90 * 60 * 1000
-    const startTargetDate = new Date(targetDate.getTime() - hourAndHalf).toISOString()
-    const endTargetDate = new Date(targetDate.getTime() + hourAndHalf).toISOString()
-
     useEffect(() => {
         const getReservations = async ()=>{
-            if(!date){
-                return
-            }
+            if(!date) return
+            const hourAndHalf = 90 * 60 * 1000
+            const targetDate = new Date(date)
+            const startTargetDate = new Date(targetDate.getTime() - hourAndHalf).toISOString()
+            const endTargetDate = new Date(targetDate.getTime() + hourAndHalf).toISOString()
             const response = await getAllReservations(startTargetDate,endTargetDate)
             if(response.success){
                 setReservations(response.data)
             }else{
-                console.log('error in get allreservations')
+                toast.error('Failed to load reservations')
             }
         }
         const getTables = async () =>{
@@ -35,13 +46,12 @@ export default function Page() {
             if(response.success){
                 setTables(response.data)
             }else{
-                console.log('error in get all tables')
+                toast.error('Failed to load tables')
             }
         }
       getTables();
       getReservations();
-    }, [date,startTargetDate,endTargetDate]);
-    const router = useRouter();
+    }, [date]);
     const handleTableSelect = (e: React.MouseEvent) => {
         e.preventDefault();
         if(!selectedTable){

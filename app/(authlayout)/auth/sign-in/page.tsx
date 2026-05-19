@@ -27,10 +27,10 @@ export default function Page() {
                     toast.success('welcome back')
                     router.push('/');
                 }else{
-                 toast.error('failed to sign in')
+                 toast.error(res.error!)
                 }
-            }catch(err){
-                toast.error('failed to sign in')
+            }catch{
+                toast.error('unknown error')
             }finally{
                 reset()
             }

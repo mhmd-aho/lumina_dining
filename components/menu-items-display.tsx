@@ -3,7 +3,8 @@ import MenuCard from "./menu-card";
 import { useState, useEffect } from "react";
 import { useCategory } from "@/lib/context/categoryContext";
 import { MenuItemType, FavoriteType, UserType } from "@/lib/schemas";
-export default function MenuItemsDisplay({user,favoritedItems}: {user: UserType,favoritedItems: FavoriteType[]}){
+import { toast } from "sonner";
+export default function MenuItemsDisplay({user,favoritedItems}: {user: UserType,favoritedItems: FavoriteType[] | undefined}){
     const {selectedCategory} = useCategory();
     const [menuItems,setMenuItems] = useState<MenuItemType[]>([]);
     useEffect(() =>{
@@ -15,8 +16,8 @@ export default function MenuItemsDisplay({user,favoritedItems}: {user: UserType,
           }
           const data = await res.json()
           setMenuItems(data);
-        }catch(error){
-          console.log(error);
+        }catch{
+          toast.error('Failed to fetch menu items');
         }
       }
       fetchMenuItems();

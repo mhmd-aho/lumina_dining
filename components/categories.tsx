@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { CategoryType } from "@/lib/schemas";
 import { useCategory } from "@/lib/context/categoryContext";
+import { toast } from "sonner";
 export default function Categories (){
     const {setSelectedCategory,selectedCategory} = useCategory();
     const [categories,setCategories] = useState<CategoryType[]>([]);
@@ -13,8 +14,8 @@ export default function Categories (){
                     throw new Error('Failed to fetch categories')
                 }
                 setCategories(await res.json());
-            }catch(error){
-                console.log(error);
+            }catch{
+               toast.error('Failed to fetch categories')
             }
         }
         fetchCategories();

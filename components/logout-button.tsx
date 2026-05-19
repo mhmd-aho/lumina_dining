@@ -6,11 +6,15 @@ export function LogoutButton(){
     const router = useRouter();
     const handleLogout =async ()=>{
         try{
-            await logoutAction();
+            const res = await logoutAction();
+            if(res.error){
+                toast.error(res.error)
+                return
+            }
             toast.success('logged out successfully')
             router.push('/')  
-        }catch(error){
-            toast.error(error as string)
+        }catch{
+            toast.error('error on logout')
         }
     }
     return(

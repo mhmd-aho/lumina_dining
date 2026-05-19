@@ -29,10 +29,10 @@ export default function Page() {
                     toast.success('account created successfully')
                     router.push('/auth/sign-in');
                 }else{
-                    toast.error('failed to create account')
+                    toast.error(res.error)
                 }
-            }catch(err){
-                toast.error('failed to create account')
+            }catch{
+                toast.error("unknown error")
             }finally{
                 reset()
             }
